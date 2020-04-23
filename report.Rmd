@@ -1,0 +1,14 @@
+---
+title: " report winequality-red.csv"
+author: "Nicco Salvini"
+date: "April 23, 2020"
+output: html_document
+---
+
+<<insertHTML:[report.html]
+
+etc, etc, etc
+
+```{r, echo=FALSE}
+htmltools::includeHTML("report.html")
+```
