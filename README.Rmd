@@ -2,7 +2,6 @@
 title: " pipeline_tidymodels"
 output: github_document
 ---
-# pipeline_tidymodels
  
 > by Joseph Rickert
 
@@ -132,4 +131,4 @@ So, here we are with a mediocre model, and I’ll stop now having shown you only
 
 Happy modeling!
 
-^[© 2016 - 2020 RStudio, PBC. All Rights Reserved.]
+© 2016 - 2020 RStudio, PBC. All Rights Reserved.
