@@ -1,54 +1,69 @@
 library(tidymodels)
 library(tidyverse)
-
-data = tibble(iris)
-
-
-
-
-lmFit = train(Y ~ X1 + X2, data = training, 
-               method = "lm", 
-               trControl = fitControl)
-
-spec_lin_reg = linear_reg() %>%   # a linear model specification
-  set_engine( "lm")  # set the model to use lm
-# fit the model
-lm_fit = fit(spec_lin_reg, Y ~ X1 + X2, data = my_data)
-
-
-spec_stan = 
-  spec_lin_reg %>%
-  set_engine("stan", chains = 4, iter = 1000) # set engine specific arguments
-
-fit_stan = fit(spec_stan, Y ~ X1 + X2, data = my_data)
-
-
-flights_rec = recipe(arr_delay ~ ., data = train_data) %>%
-  update_role(flight, time_hour, new_role = "ID") %>% 
-  step_date(date, features = c("dow", "month")) %>% 
-  step_rm(date) %>% 
-  step_dummy(all_nominal(), -all_outcomes())
-
-
-lr_mod = logistic_reg() %>%
-  set_engine("glm")
-
-
-flights_wflow = workflow() %>% 
-  add_model(lr_mod) %>%
-  add_recipe(flights_rec)
+library(parsnip)
+library(DataExplorer)
+library(scales)
 
 
 
-flights_fit = fit(flights_wflow, data = train_data)
+len = function(x) {
+  length(x)
+}
+
+
+data = tibble(winequality_red)
+data %>% 
+  names()
 
 set.seed(123)
-folds = vfold_cv(train_data, v = 10)
-flights_fit_rs = fit_resamples(flights_wflow, folds)
+attach(data)
+glimpse(data)
+DataExplorer::create_report(data)
 
-collect_metrics(flights_fit_rs)
+# from  HERE I CAN SEE THAT THERE AR E NOLY 6 
+# OBS MISSING SO I CAN  COMPLETELY FORGET ABOUT THEM 
+
+split = initial_split(data, props = 9/10)
+wine_train = training(split)
+wine_test  = testing(split)
+
+wine_rec = 
+  recipe(quality ~ ., data = wine_train) %>% 
+  step_center(all_predictors()) %>%
+  step_scale(all_predictors()) %>% 
+  prep(training = wine_train, retain = T)
+
+train_data = juice(wine_rec)
+test_data  = bake(wine_rec, wine_test)
+
+wine_model = linear_reg()
+wine_model
+
+lm_wine_model = 
+  wine_model %>%
+  set_engine("lm")
+lm_wine_model
+
+lm_fit =
+  lm_wine_model %>%
+  fit(quality ~ ., data = wine_train)
 
 
+stan_wine_model =
+  wine_model %>%
+  set_engine("stan",  iter = 5000, prior_intercept = rstanarm::cauchy(0, 10), seed = 123)
+stan_wine_model
 
+stan_fit =
+  stan_wine_model %>%
+  fit(quality ~ ., data = wine_train)
+
+
+predict(lm_fit, wine_test)
+predict(stan_fit, wine_test)
+
+
+predict(lm_fit, wine_test, type = "conf_int")
+predict(stan_fit, wine_test, type = "conf_int")
 
 
