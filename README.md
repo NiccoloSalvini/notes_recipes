@@ -1,8 +1,6 @@
 pipeline\_tidymodels
 ================
 
-# pipeline\_tidymodels
-
 > by Joseph Rickert
 
 -----
@@ -30,9 +28,9 @@ If you are an R user and you have building predictive models then there
 is a good chance that you are familiar with the *caret* package. One
 straightforward path to investigate *tidymodels* is to follow the thread
 that leads form *caret* to *parsnip.* *caret*, the result of a
-monumental fifteen year plus effort, incorporates **[two hundred
+monumental fifteen year plus effort, incorporates [**two hundred
 thirty-eight predictive
-models](https://topepo.github.io/caret/available-models.html)** into a
+models**](https://topepo.github.io/caret/available-models.html) into a
 common framework. For example, any one of the included models can be
 substituted for lm in the following expression.
 
@@ -79,7 +77,9 @@ To see how all of this comes together, lets look at recipe used in the
 tidymodels recipes tutorial that uses the New York City flights data
 set, *nycflights13.* We assume that all of the data wrangling code in
 the tutorial has been executed, and we pick up with the code to define
-the recipe:
+the recipe. For the tutorial in this I will be using a dataset that come
+from **UCI**, called
+[*wine\_quality\_red*](https://archive.ics.uci.edu/ml/datasets/Wine+Quality)
 
 ``` r
 flights_rec <- 
@@ -187,6 +187,4 @@ pages and a section on making contributions.
 
 Happy modeling\!
 
-\[1\]
-
-1.  © 2016 - 2020 RStudio, PBC. All Rights Reserved.
+© 2016 - 2020 RStudio, PBC. All Rights Reserved.

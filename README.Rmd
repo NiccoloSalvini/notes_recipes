@@ -15,7 +15,7 @@ If you are a data scientist with a built-out set of modeling tools that you know
 
 So what are we talking about? tidymodels are an integrated, modular, extensible set of packages that implement a framework that facilitates creating __predicative stochastic models__. tidymodels are first class members of the tidyverse. They adhere to tidyverse syntax and design principles that promote consistency and well-designed human interfaces over speed of code execution. Nevertheless, __they automatically build in parallel execution__ for tasks such as resampling, cross validation and parameter tuning. Moreover, they don’t just work through the steps of the basic modeling workflow, they implement conceptual structures that _make complex iterative workflows possible and reproducible_.
 
-If you are an R user and you have building predictive models then there is a good chance that you are familiar with the _caret_ package. One straightforward path to investigate _tidymodels_ is to follow the thread that leads form _caret_ to _parsnip._ _caret_, the result of a monumental fifteen year plus effort, incorporates __[two hundred thirty-eight predictive models](https://topepo.github.io/caret/available-models.html)__ into a common framework. For example, any one of the included models can be substituted for lm in the following expression.
+If you are an R user and you have building predictive models then there is a good chance that you are familiar with the _caret_ package. One straightforward path to investigate _tidymodels_ is to follow the thread that leads form _caret_ to _parsnip._ _caret_, the result of a monumental fifteen year plus effort, incorporates [__two hundred thirty-eight predictive models__](https://topepo.github.io/caret/available-models.html) into a common framework. For example, any one of the included models can be substituted for lm in the following expression.
 
 ```{r, results="hide", error = TRUE, eval=FALSE }
 
@@ -51,7 +51,7 @@ fit_stan = fit(spec_stan, Y ~ X1 + X2, data = my_data)
 On its own, _parnsnip_ provides a time saving framework for exploring multiple models. It is really nice __not to have to worry about the idiosyncratic syntax developed for different model algorithms__. But, the real power of tidymodels is baked into the recipes package. Recipes are structures that bind a sequence of preprocessing steps to a training data set. They define the roles that the variables are to play in the design matrix, specify what data cleaning needs to take place, and what feature engineering needs to happen.
 
 
-To see how all of this comes together, lets look at recipe used in the tidymodels recipes tutorial that uses the New York City flights data set, _nycflights13._ We assume that all of the data wrangling code in the tutorial has been executed, and we pick up with the code to define the recipe:
+To see how all of this comes together, lets look at recipe used in the tidymodels recipes tutorial that uses the New York City flights data set, _nycflights13._ We assume that all of the data wrangling code in the tutorial has been executed, and we pick up with the code to define the recipe. For the tutorial in the script I will be using a dataset that come from **UCI**, called [_wine_quality_red_](https://archive.ics.uci.edu/ml/datasets/Wine+Quality)
 
 ```{r,results="hide", error = TRUE, eval=FALSE}
 

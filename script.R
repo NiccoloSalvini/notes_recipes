@@ -1,3 +1,11 @@
+library(tidymodels)
+library(tidyverse)
+
+data = tibble(iris)
+
+
+
+
 lmFit = train(Y ~ X1 + X2, data = training, 
                method = "lm", 
                trControl = fitControl)
