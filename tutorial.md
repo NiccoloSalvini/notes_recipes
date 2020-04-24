@@ -25,6 +25,7 @@ the first time it is just a matter of copy and paste
 library(recipes)
 library(tidyverse)
 library(caret)
+library(dimRed)
 ```
 
 ``` r
@@ -294,56 +295,9 @@ ggplot(pca, aes(x = PC01, y = PC02, color = Class)) + geom_point(alpha = .4)
 
 ## Principal Component Analysis
 
-![](tutorai_files/figure-gfm/image_pca_fig-1.png)<!-- -->
+![](tutorial_files/figure-gfm/image_pca_fig-1.png)<!-- -->
 
 ## Kernel Principal Component Analysis
-
-``` r
-library(dimRed)
-```
-
-    ## Warning: package 'dimRed' was built under R version 3.6.3
-
-    ## Loading required package: DRR
-
-    ## Warning: package 'DRR' was built under R version 3.6.3
-
-    ## Loading required package: kernlab
-
-    ## 
-    ## Attaching package: 'kernlab'
-
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     cross
-
-    ## The following object is masked from 'package:ggplot2':
-    ## 
-    ##     alpha
-
-    ## Loading required package: CVST
-
-    ## Warning: package 'CVST' was built under R version 3.6.3
-
-    ## Loading required package: Matrix
-
-    ## 
-    ## Attaching package: 'Matrix'
-
-    ## The following objects are masked from 'package:tidyr':
-    ## 
-    ##     expand, pack, unpack
-
-    ## 
-    ## Attaching package: 'dimRed'
-
-    ## The following object is masked from 'package:stats':
-    ## 
-    ##     embed
-
-    ## The following object is masked from 'package:base':
-    ## 
-    ##     as.data.frame
 
 ``` r
 kern_pca <- basic %>% 
@@ -358,11 +312,11 @@ kern_pca <- basic %>%
 kern_pca <- prep(kern_pca)
 ```
 
-    ## 2020-04-24 02:26:36: Calculating kernel PCA
+    ## 2020-04-24 02:32:20: Calculating kernel PCA
 
-    ## 2020-04-24 02:26:38: Trying to calculate reverse
+    ## 2020-04-24 02:32:23: Trying to calculate reverse
 
-    ## 2020-04-24 02:26:39: DONE
+    ## 2020-04-24 02:32:24: DONE
 
 ``` r
 kern_pca <- bake(kern_pca, new_data = seg_test, everything())
@@ -370,7 +324,7 @@ kern_pca <- bake(kern_pca, new_data = seg_test, everything())
 
 ## Kernel Principal Component Analysis
 
-![](tutorai_files/figure-gfm/image_kpca_fig-1.png)<!-- -->
+![](tutorial_files/figure-gfm/image_kpca_fig-1.png)<!-- -->
 
 ## Distance to Each Class Centroid
 
@@ -402,4 +356,4 @@ dist_to_classes
 
 ## Distance to Each Class
 
-![](tutorai_files/figure-gfm/image_dists_fig-1.png)<!-- -->
+![](tutorial_files/figure-gfm/image_dists_fig-1.png)<!-- -->
