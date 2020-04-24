@@ -1,13 +1,25 @@
-recipe tutorial
-================
+---
+title: "Recipe tutorial"
+author: "Niccolò Salvini"
+date: "24/4/2020"
+output: html_document
+---
+
+
 
 ### tutorial
+
+
+![img1](img/logo.png)
 
 this tutorial comes from the
 [RStudio 2017](https://rstudio.com/resources/webinars/creating-and-preprocessing-a-design-matrix-with-recipes/)
 conference where the author of the package
-[Kuhn](https://resources.rstudio.com/authors/max-kuhn) explains the
-functionalisties and the idea behind building the **recipe **
+[Max Kuhn](https://resources.rstudio.com/authors/max-kuhn) explains the
+functionalisties and the idea behind building the **recipe **. Those are all notes taken during the lecture
+
+
+**warinng** something can have changes and it had. 
 
 The idea is pretty simple once you have to cook a dish you have to know
 the recipe. Once yoi know the recipe which is basicallu a sequence of
@@ -15,17 +27,21 @@ simple steps you can then perform the dish and serve it. If at some
 point you understand that the dish is missing something, say some spicy,
 you should not *undish* the dinner but simply go get the grocery at the
 store and add the extraflavour in the right spot, without say messing
-the impiattamento. This is mainly good for at **least 4 reasons** 1. it
-follows good statistical practice 1. it keeps all the stuff well ordered
-1. it gives a solution toghether with the *parnsip* to gather all the
-different models into one common framework 1. once you have done it for
-the first time it is just a matter of copy and paste
+the impiattamento. This is mainly good for at **least 4 reasons**:
 
-\`\`\`{r, warning=FALSE, message=FALSE}
+1. itfollows good statistical practice 
+1. it keeps all the stuff well ordered
+1. it gives a solution toghether with the *parnsip* to gather all the different models into one common framework 
+1. once you have done it forthe first time it is just a matter of copy and paste
 
-library(recipes) library(tidyverse) library(caret) library(dimRed)
+```{r, warning=FALSE, message=FALSE}
 
-\`\`\`
+library(recipes)
+library(tidyverse) 
+library(caret) 
+library(dimRed)
+
+```
 
 ``` {r}
 
@@ -41,7 +57,7 @@ rec
 
 one you have initialized the recipe you can start add steps to the
 recipe: so if you want to take the original recipe and add a step said
-to be *step\_log* and you simply put the variabile inside the
+to be *step_log* and you simply put the variabile inside the
 parentheses and that modifies the recipe including the step done (this
 as it is said will add the logarithm to the variable price) then say
 that you want to dummyfy the varible type. You pipe operate all the
@@ -70,7 +86,7 @@ design_mat = bake(rec_trained, new_data = Sacramento)
 now going on with the analogy you cook the recipe, so we take the object
 that we created and then apply this recipe to the dataset that I have.
 It like an apply method. the reason why you can specify the dataset is
-that the \[4^{th}\] I said before, once you specify the recipe you can
+that the [4^{th}] I said before, once you specify the recipe you can
 cook pass throught the steps any ingredients that you want. **So this is
 the full idea behind** the rest are all the features of the package, so
 all the steps that you can add to your dataset preprocess and so on.
@@ -81,12 +97,11 @@ discretized predictors with dynamic bins. What the dplyr syntax actually
 permits us to do is to apply the step to a set of columns, instead for a
 single one.
 
-\`\`\`{r, echo=FALSE, error=FALSE, eval=FALSE}
+```{r, echo=FALSE, error=FALSE, eval=FALSE}
 
-step\_spatialsign(matches(“PC\[1-9\]”), all\_numeric(),
--all\_outcomes())
+step_spatialsign(matches(“PC[1-9]”), all_numeric(),-all_outcomes())
 
-\`\`\`
+```
 
 One other interesting feature is that you can decide before actually
 perfoming operations how many pca’s you want, you might want to do
@@ -127,89 +142,132 @@ toghether like in the python framework:
 
 ``` {r}
 lin_reg.recipe = function(rec,data) {
-  trained = prepare(rec, training = data)
-  lm.fit(x= bake(trained, newdara = data, all_predictors()),
-         y =bake(trained, newdara = data, all_outcomes()))
+  trained = prep(rec, training = data)
+  lm.fit(x= bake(trained, new_data = data, all_predictors()),
+         y =bake(trained, new_data = data, all_outcomes()))
   
 }
 
 ```
 
-## An Example
+## An Example 
 
-[Kuhn and Johnson](http://appliedpredictivemodeling.com) (2013) analyze
-a data set where thousands of cells are determined to be well-segmented
-(WS) or poorly segmented (PS) based on 58 image features. We would like
-to make predictions of the segmentation quality based on these features.
+[Kuhn and Johnson](http://appliedpredictivemodeling.com) (2013) analyze a data set where thousands of cells are determined to be well-segmented (WS) or poorly segmented (PS) based on 58 image features. We would like to make predictions of the segmentation quality based on these features. 
 
-`{r image_load} library(dplyr) library(caret) data("segmentationData")
-seg_train <- segmentationData %>% filter(Case == "Train") %>%
-select(-Case, -Cell) seg_test <- segmentationData %>% filter(Case ==
-"Test") %>% select(-Case, -Cell)`
+```{r image_load}
+library(dplyr)
+library(caret)
+data("segmentationData")
+seg_train <- segmentationData %>% 
+  filter(Case == "Train") %>% 
+  select(-Case, -Cell)
+seg_test  <- segmentationData %>% 
+  filter(Case == "Test")  %>% 
+  select(-Case, -Cell)
+```
+
+
 
 ## A Simple Recipe
 
-`{r image_rec} rec <- recipe(Class ~ ., data = seg_train) basic <- rec
-%>% # Correct some predictors for skewness
-step_YeoJohnson(all_predictors()) %>% # Standardize the values
-step_center(all_predictors()) %>% step_scale(all_predictors()) #
-Estimate the transformation and standardization parameters basic <-
-prep(basic, training = seg_train, verbose = FALSE, retain = TRUE) basic`
+```{r image_rec}
+rec <- recipe(Class  ~ ., data = seg_train)
+basic <- rec %>%
+  # Correct some predictors for skewness
+  step_YeoJohnson(all_predictors()) %>%
+  # Standardize the values
+  step_center(all_predictors()) %>%
+  step_scale(all_predictors())
+# Estimate the transformation and standardization parameters 
+basic <- prep(basic, training = seg_train, verbose = FALSE, retain = TRUE)  
+```
+
+
 
 ## Principal Component Analysis
 
-`{r image_pca} pca <- basic %>% step_pca(all_predictors(), threshold =
-.9) summary(pca)`
+```{r image_pca}
+pca <- basic %>% step_pca(all_predictors(), threshold = .9)
+summary(pca)
+```
+
 
 ## Principal Component Analysis
 
-`{r image_pca_train} pca <- prep(pca) summary(pca) pca <- bake(pca,
-new_data = seg_test, everything()) pca`
+```{r image_pca_train}
+pca <- prep(pca)
+summary(pca)
+pca <- bake(pca, new_data = seg_test, everything())
+```
+
 
 ## Principal Component Analysis
 
-`{r image_pca_plot, fig.keep="none"} pca[1:4, 1:8] ggplot(pca, aes(x =
-PC01, y = PC02, color = Class)) + geom_point(alpha = .4)`
+```{r image_pca_plot, fig.keep="none"}
+pca[1:4, 1:8]
+ggplot(pca, aes(x = PC01, y = PC02, color = Class)) + geom_point(alpha = .4)
+```
+
 
 ## Principal Component Analysis
 
-`{r image_pca_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6} rngs
-<- extendrange(c(pca$PC01, pca$PC02)) ggplot(pca, aes(x = PC01, y =
-PC02, color = Class)) + geom_point(alpha = .4) + xlim(rngs) + ylim(rngs)
-+ theme(legend.position = "top")`
+```{r image_pca_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6}
+rngs <- extendrange(c(pca$PC01, pca$PC02))
+ggplot(pca, aes(x = PC01, y = PC02, color = Class)) + 
+  geom_point(alpha = .4) + 
+  xlim(rngs) + ylim(rngs) + 
+  theme(legend.position = "top")
+```
+
+
 
 ## Kernel Principal Component Analysis
 
-\`\`\`{r kpca}
+```{r kpca}
+kern_pca <- basic %>% 
+  step_kpca(all_predictors(), num = 2, 
+            options = list(kernel = "rbfdot", 
+                           kpar = list(sigma = 0.05)))
+kern_pca <- prep(kern_pca)
+kern_pca <- bake(kern_pca, new_data = seg_test, everything())
+```
 
-kern\_pca \<- basic %\>% step\_kpca(all\_predictors(), num = 2, options
-= list(kernel = “rbfdot”, kpar = list(sigma = 0.05))) kern\_pca \<-
-prep(kern\_pca) kern\_pca \<- bake(kern\_pca, new\_data = seg\_test,
-everything()) \`\`\`
 
 ## Kernel Principal Component Analysis
 
-`{r image_kpca_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6}
-rngs <- extendrange(c(kern_pca$kPC1, kern_pca$kPC2)) ggplot(kern_pca,
-aes(x = kPC1, y = kPC2, color = Class)) + geom_point(alpha = .4) +
-xlim(rngs) + ylim(rngs) + theme(legend.position = "top")`
+```{r image_kpca_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6}
+rngs <- extendrange(c(kern_pca$kPC1, kern_pca$kPC2))
+ggplot(kern_pca, aes(x = kPC1, y = kPC2, color = Class)) + 
+  geom_point(alpha = .4) + 
+  xlim(rngs) + ylim(rngs) + 
+  theme(legend.position = "top")
+```
+
 
 ## Distance to Each Class Centroid
 
-`{r dists, message = FALSE} dist_to_classes <- basic %>%
-step_classdist(all_predictors(), class = "Class") %>% # Take log of the
-new distance features step_log(starts_with("classdist")) dist_to_classes
-<- prep(dist_to_classes, verbose = FALSE) # All variables are retained
-plus an additional one for each class dist_to_classes <-
-bake(dist_to_classes, new_data = seg_test, matches("[Cc]lass"))
-dist_to_classes`
+```{r dists, message = FALSE}
+dist_to_classes <- basic %>% 
+  step_classdist(all_predictors(), class = "Class") %>%
+  # Take log of the new distance features
+  step_log(starts_with("classdist"))
+dist_to_classes <- prep(dist_to_classes, verbose = FALSE)
+# All variables are retained plus an additional one for each class
+dist_to_classes <- bake(dist_to_classes, new_data = seg_test, matches("[Cc]lass"))
+dist_to_classes
+```
+
+
 
 ## Distance to Each Class
 
-`{r image_dists_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6}
-rngs <- extendrange(c(dist_to_classes$classdist_PS,
-dist_to_classes$classdist_WS)) ggplot(dist_to_classes, aes(x =
-classdist_PS, y = classdist_WS, color = Class)) + geom_point(alpha = .4)
-+ xlim(rngs) + ylim(rngs) + theme(legend.position = "top") +
-xlab("Distance to PS Centroid (log scale)") + ylab("Distance to WS
-Centroid (log scale)")`
+```{r image_dists_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6}
+rngs <- extendrange(c(dist_to_classes$classdist_PS, dist_to_classes$classdist_WS))
+ggplot(dist_to_classes, aes(x = classdist_PS, y = classdist_WS, color = Class)) + 
+  geom_point(alpha = .4) + 
+  xlim(rngs) + ylim(rngs) + 
+  theme(legend.position = "top") + 
+  xlab("Distance to PS Centroid (log scale)") + 
+  ylab("Distance to WS Centroid (log scale)")
+```
+
