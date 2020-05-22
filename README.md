@@ -1,11 +1,11 @@
-pipeline\_recipes
-================
 Niccolò Salvini
 24/4/2020
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/recipes)](http://cran.r-project.org/web/packages/recipes)
+<img src="img/logo.png" align="right" height="100" />
 
-<img src="img/logo.png" alt="drawing" width="139"/>
+# glimpse(Recipe)
+
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/recipes)](http://cran.r-project.org/web/packages/recipes)
 
 ## Introduction
 
@@ -268,26 +268,23 @@ pca <- bake(pca, new_data = seg_test, everything())
 
 ## Principal Component Analysis
 
+<p align="center">
+
 ``` r
 pca[1:4, 1:8]
-```
-
-    ## # A tibble: 4 x 8
-    ##   Class  PC01  PC02   PC03   PC04  PC05   PC06   PC07
-    ##   <fct> <dbl> <dbl>  <dbl>  <dbl> <dbl>  <dbl>  <dbl>
-    ## 1 PS     4.86 -5.85 -0.891 -4.13  1.84  -2.29  -3.88 
-    ## 2 PS     3.28 -1.51  0.353 -2.24  0.441 -0.911  0.800
-    ## 3 WS    -7.03 -1.77 -2.42  -0.652 3.22  -0.212  0.118
-    ## 4 WS    -6.96 -2.08 -2.89  -1.79  3.20  -0.845 -0.204
-
-``` r
 ggplot(pca, aes(x =PC01, y = PC02, color = Class)) + 
   geom_point(alpha = .4)
 ```
 
+</p>
+
 ## Principal Component Analysis
 
-![](README_files/figure-gfm/image_pca_fig-1.png)<!-- -->
+<p align="center">
+
+<img src="img/image_pca_fig-1.png" width="528" />
+
+</p>
 
 ## Kernel Principal Component Analysis
 
@@ -302,11 +299,11 @@ kern_pca <- basic %>% step_kpca(all_predictors(), num = 2,
 kern_pca<- prep(kern_pca)
 ```
 
-    ## 2020-04-25 02:09:29: Calculating kernel PCA
+    ## 2020-05-22 18:48:03: Calculating kernel PCA
 
-    ## 2020-04-25 02:09:32: Trying to calculate reverse
+    ## 2020-05-22 18:48:06: Trying to calculate reverse
 
-    ## 2020-04-25 02:09:33: DONE
+    ## 2020-05-22 18:48:07: DONE
 
 ``` r
 kern_pca <- bake(kern_pca, new_data = seg_test, everything())
@@ -314,7 +311,11 @@ kern_pca <- bake(kern_pca, new_data = seg_test, everything())
 
 ## Kernel Principal Component Analysis
 
-![](README_files/figure-gfm/image_kpca_fig-1.png)<!-- -->
+<p align="center">
+
+<img src="img/image_kpca_fig-1.png" width="528" />
+
+</p>
 
 ## Distance to Each Class Centroid
 
@@ -345,4 +346,8 @@ dist_to_classes
 
 ## Distance to Each Class
 
-![](README_files/figure-gfm/image_dists_fig-1.png)<!-- -->
+<p align="center">
+
+<img src="img/image_dists_fig-1.png" width="528" />
+
+</p>

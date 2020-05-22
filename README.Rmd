@@ -1,12 +1,43 @@
 ---
-title: "pipeline_recipes"
 author: "Niccolò Salvini"
 date: "24/4/2020"
 output: rmarkdown::github_document
 ---
+
+```{r global.options, include=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,  
+  strip.white = TRUE,                 # if FALSE knitr will not remove white spaces at the beg or end
+  fig.path = "img/",                  # file path to the directory DESTINATION where knitr shall store the
+  fig.width=12,                       # the width for plots created by code chunk
+  fig.height=8,                       # the height for plots created by code chunk
+  cache = FALSE                       # if TRUE knitr will cache the results to reuse in future knits
+
+)
+
+
+knitr::knit_hooks$set(imgcenter = function(before, options, envir){  # to center image 
+  if (before) {                                                      # add imgcenter = TRUE
+    htmltools::HTML("<p align='center'>")                            # to the chunk options
+  } else {
+    htmltools::HTML("</p>")
+  }
+})
+
+```
+
+
+
+<img src="img/logo.png" align="right" height="100" />
+
+# glimpse(Recipe)
+
+
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/recipes)](http://cran.r-project.org/web/packages/recipes)
 
-<img src="img/logo.png" alt="drawing" width="139"/>
+
+
+
 
 ## Introduction
 
@@ -46,7 +77,7 @@ From my perspective this is mainly good for at **least 4 reasons**:
 
 
 
-```{r, warning=FALSE, include=FALSE}
+```{r remedy01, warning=FALSE, include=FALSE}
 
 library(recipes) 
 library(tidyverse) 
@@ -58,7 +89,7 @@ library(dimRed)
 
 ## R Model Formulas
 
-```{r}
+```{r remedy02}
 
 data(Sacramento)
 
@@ -82,7 +113,7 @@ specifying all the operations that we want to perform. The recipe to serve our b
 
 ## `prep()` preparation step
 
-```{r}
+```{r remedy03}
 
 rec_trained = prep(rec, training = Sacramento, retain = T)
 
@@ -103,7 +134,7 @@ It is pretty like an apply method. The reason why you can specify the dataset ca
 cook through the steps with any ingredients. Say you are cooking chicken masala, you know the recipe beacuse you love indian food. Once you have to make lamb masala, assuming that there is no indian chef hearing, it is just a matter of coocking meat time. 
 
 
-```{r}
+```{r remedy04}
 design_mat = bake(rec_trained, new_data = Sacramento)
 ```
 
@@ -115,7 +146,7 @@ What the `dplyr` syntax actually
 allow us to do is to apply the step to a set of columns that have in common a feature, the fact that they are numeric.
 
 
-```{r, echo=FALSE, error=FALSE, eval=FALSE}
+```{r remedy05, echo=FALSE, error=FALSE, eval=FALSE}
 
 step_spatialsign(matches(“PC[1-9]”), all_numeric(),-all_outcomes())
 
@@ -132,7 +163,7 @@ Seebelow:
 
 ## second step preprocess
 
-```{r}
+```{r remedy06}
 
 standardized = rec_trained %>% 
   step_center(all_numeric()) %>% 
@@ -160,7 +191,7 @@ holidays (purrr it before) imputation: all the main imputation
 Once you have all set up you can call the fucntion that wraps all
 toghether like in the python framework:
 
-```{r}
+```{r remedy07}
 lin_reg.recipe = function(rec,data) {
   trained = prep(rec, training = data)
   lm.fit(x= bake(trained, new_data = data, all_predictors()),
@@ -220,15 +251,16 @@ pca <- bake(pca, new_data = seg_test, everything())
 
 ## Principal Component Analysis
 
-```{r image_pca_plot, fig.keep="none"}
+```{r image_pca_plot, fig.keep="none", imgcenter = TRUE, eval=FALSE}
 pca[1:4, 1:8]
 ggplot(pca, aes(x =PC01, y = PC02, color = Class)) + 
   geom_point(alpha = .4)
 ```
 
+
 ## Principal Component Analysis
 
-```{r image_pca_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6} 
+```{r image_pca_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6, eval=FALSE} 
 
 rngs <- extendrange(c(pca$PC01, pca$PC02))
 ggplot(pca, aes(x = PC01, y = PC02, color = Class)) +
@@ -238,6 +270,11 @@ ggplot(pca, aes(x = PC01, y = PC02, color = Class)) +
   theme(legend.position = "top")
 
 ```
+
+```{r, echo=FALSE, imgcenter  = TRUE}
+knitr::include_graphics("img/image_pca_fig-1.png")
+```
+
 
 ## Kernel Principal Component Analysis
 
@@ -249,15 +286,20 @@ kern_pca <- bake(kern_pca, new_data = seg_test, everything())
 
 ```
 
+
 ## Kernel Principal Component Analysis
 
-```{r image_kpca_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6}
+```{r image_kpca_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6, eval=FALSE}
 
 rngs <- extendrange(c(kern_pca$kPC1, kern_pca$kPC2)) 
 ggplot(kern_pca,
        aes(x = kPC1, y = kPC2, color = Class)) +
   geom_point(alpha = .4) +
   xlim(rngs) + ylim(rngs) + theme(legend.position = "top")
+```
+
+```{r, echo=FALSE, imgcenter  = TRUE}
+knitr::include_graphics("img/image_kpca_fig-1.png")
 ```
 
 ## Distance to Each Class Centroid
@@ -274,7 +316,7 @@ dist_to_classes
 
 ## Distance to Each Class
 
-```{r image_dists_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6}
+```{r image_dists_fig, echo = FALSE, fig.width = 5.5, fig.height = 5.6, eval=FALSE}
 
 rngs <- extendrange(c(dist_to_classes$classdist_PS,dist_to_classes$classdist_WS))
 ggplot(dist_to_classes, aes(x =classdist_PS, y = classdist_WS, color = Class)) +
@@ -285,3 +327,9 @@ ggplot(dist_to_classes, aes(x =classdist_PS, y = classdist_WS, color = Class)) +
   xlab("Distance to PS Centroid (log scale)") + 
   ylab("Distance to WS Centroid (log scale)")
 ```
+
+```{r, echo=FALSE, imgcenter  = TRUE}
+knitr::include_graphics("img/image_dists_fig-1.png")
+```
+
+

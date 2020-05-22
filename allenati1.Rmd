@@ -1,0 +1,87 @@
+---
+output: 
+  github_document:
+    toc: TRUE
+    toc_depth: 3
+    fig_width: 5
+    fig_height: 5
+---
+
+```{r global.options, include=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,  
+  strip.white = TRUE,                 # if FALSE knitr will not remove white spaces at the beg or end
+  fig.path = "img/",                  # file path to the directory DESTINATION where knitr shall store the
+  fig.width=12,                       # the width for plots created by code chunk
+  fig.height=8,                       # the height for plots created by code chunk
+  cache = FALSE                       # if TRUE knitr will cache the results to reuse in future knits
+)
+
+
+knitr::knit_hooks$set(imgcenter = function(before, options, envir){  # to center image 
+  if (before) {                                                      # add imgcenter = TRUE
+    htmltools::HTML("<p align='center'>")                            # to the chunk options
+  } else {
+    htmltools::HTML("</p>")
+  }
+})
+
+library(readr)
+library(recipes)
+library(tune)
+library(janitor)
+
+```
+
+
+ 
+# "Reviem from eric ekholm"
+
+_author_: **[eric-ekholm](https://eric-ekholm.netlify.app/blog/tidymodels-walkthrough/)**
+_date_: `r format(Sys.Date(), "%d %B, %Y")`
+
+## Load
+
+load train data from kaggle competition: 
+
+```{r}
+
+train <- read_csv("train.csv") %>%
+  clean_names()
+
+```
+
+## preprocess
+
+We’ll implement a number of preprocessing steps here. These are somewhat generic because we didn’t do an EDA of our data. Again, the point of this is to get a feel for a tidymodels workflow rather than to build a really great model for this data. In these steps, we will:
+
+1. Convert all strings to factors
+1. Pool infrequent factors into an “other” category
+1. Remove near-zero variance predictors
+1. Impute missing values using k nearest neighbors
+1. Dummy out all factors
+1. Log transform our outcome (which is skewed)
+1. Mean center all numeric predictors (which will be all of them at this point)
+1. Normalize all numeric predictors
+
+
+
+```{r, eval=FALSE }
+preprocess_recipe <- train %>%
+  select(-id) %>%
+  recipe(sale_price ~ .) %>%
+  step_string2factor(all_nominal()) %>% #this converts all of our strings to factors
+  step_other(all_nominal(), threshold = .05) %>% #this will pool infrequent factors into an "other" category
+  step_nzv(all_predictors()) %>% #this will remove zero or near-zero variance predictors
+  step_knnimpute(all_predictors(), neighbors = 5) %>% #this will impute values for predictors using KNN
+  step_dummy(all_nominal()) %>% #this will dummy out all factor variables
+  step_log(all_outcomes()) %>% #log transforming the outcome because it's skewed
+  step_center(all_numeric(), -all_outcomes()) %>% #this will mean-center all of our numeric data
+  step_scale(all_numeric(), -all_outcomes()) %>% #this will normalize numeric data
+  prep()
+
+preprocess_recipe
+```
+
+
+

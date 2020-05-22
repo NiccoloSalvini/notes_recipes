@@ -4,6 +4,8 @@ library(parsnip)
 library(DataExplorer)
 library(scales)
 
+# qui definisco alcune funzioni
+# user built-in
 
 
 len = function(x) {
